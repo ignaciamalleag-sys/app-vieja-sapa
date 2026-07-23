@@ -1,0 +1,24 @@
+{
+  "name": "Reportes Vieja Sapa - Denuncias Ambientales",
+  "short_name": "Vieja Sapa",
+  "description": "PWA social gratuita para reportar desvíos ambientales, microbasurales y vertederos con GPS y fotos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#065f46",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
