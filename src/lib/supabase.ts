@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { EnvironmentalReport } from './types';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = rawUrl.replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export const isSupabaseConfigured = Boolean(
@@ -14,6 +15,7 @@ export const isSupabaseConfigured = Boolean(
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
+
 
 /**
  * Uploads a photo file to Supabase Storage or returns base64 fallback URL
@@ -103,17 +105,25 @@ export function getLocalReports(): EnvironmentalReport[] {
 
 export async function fetchAllReports(): Promise<EnvironmentalReport[]> {
   if (isSupabaseConfigured && supabase) {
-    const { data, error } = await supabase
-      .from('reports')
-      .select('*')
-      .order('created_at', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('reports')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (!error && data) {
-      return data as EnvironmentalReport[];
+      if (!error && data) {
+        return data as EnvironmentalReport[];
+      }
+      if (error) {
+        console.warn('Supabase error, usando fallback local:', error.message);
+      }
+    } catch (err) {
+      console.warn('Error conectando a Supabase, usando fallback local:', err);
     }
   }
   return getLocalReports();
 }
+
 
 function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
