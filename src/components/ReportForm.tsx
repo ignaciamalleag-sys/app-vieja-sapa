@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, FileText, Send, CheckCircle2, AlertCircle, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
+import { Mail, Send, CheckCircle2, AlertCircle, Loader2, ShieldCheck } from 'lucide-react';
 import MapPicker from './MapPicker';
 import PhotoUploader from './PhotoUploader';
 import { PhotoFile, EnvironmentalReport } from '../lib/types';
@@ -26,7 +26,6 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
     e.preventDefault();
     setErrorMessage(null);
 
-    // 1. Validation of all required fields
     if (!email.trim() || !email.includes('@')) {
       setErrorMessage('Por favor ingresa un email válido del vecino denunciante.');
       return;
@@ -55,7 +54,6 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
     setSubmitting(true);
 
     try {
-      // 2. Upload photos to Supabase Storage or Base64 fallback
       const photoUrls: string[] = [];
       for (const photo of photos) {
         const uploadedUrl = await uploadReportPhoto(photo.file);
@@ -73,10 +71,8 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
         photo_urls: photoUrls,
       };
 
-      // 3. Save report to Supabase DB / local storage
       const savedReport = await saveReport(reportData);
 
-      // 4. Call API Route to send email to maepv.pruebas@gmail.com with image links
       let emailStatusMsg = '';
       try {
         const emailRes = await fetch('/api/reports/send-email', {
@@ -104,7 +100,6 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
 
       onReportSubmitted(savedReport);
 
-      // Reset form
       setEmail('');
       setDescription('');
       setPhotos([]);
@@ -117,44 +112,44 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
   };
 
   return (
-    <div className="bg-slate-900/90 backdrop-blur-xl border border-emerald-800/40 rounded-2xl shadow-2xl p-5 sm:p-8">
+    <div className="bg-white border border-slate-200/90 rounded-2xl shadow-xl shadow-slate-200/50 p-6 sm:p-8">
       
-      {/* Form Title & Banner */}
-      <div className="flex items-center gap-3 pb-6 mb-6 border-b border-slate-800">
-        <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+      {/* Form Title & Header */}
+      <div className="flex items-center gap-3.5 pb-6 mb-6 border-b border-slate-100">
+        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm">
           <ShieldCheck className="w-6 h-6" />
         </div>
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             Crear Nuevo Reporte Ambiental
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
-            Todos los campos marcados con (<span className="text-emerald-400">*</span>) son obligatorios.
+          <p className="text-xs sm:text-sm text-slate-500 font-medium">
+            Todos los campos marcados con (<span className="text-emerald-600 font-bold">*</span>) son obligatorios.
           </p>
         </div>
       </div>
 
       {/* Success Modal / Banner */}
       {successData && (
-        <div className="mb-6 bg-gradient-to-r from-emerald-950/90 via-teal-950/90 to-slate-900 border-2 border-emerald-500 p-5 rounded-2xl shadow-xl animate-fade-in">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shrink-0 mt-0.5 font-bold">
+        <div className="mb-6 bg-gradient-to-r from-emerald-50 via-teal-50 to-white border-2 border-emerald-500 p-5 rounded-2xl shadow-md animate-fade-in">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5 font-bold shadow">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-bold text-emerald-300">
+              <h3 className="text-lg font-bold text-emerald-900">
                 ¡Reporte Registrado con Éxito!
               </h3>
-              <p className="text-sm text-slate-200">
+              <p className="text-sm text-slate-700 font-medium">
                 El desvío ambiental ha sido almacenado en la base de datos de Supabase y notificado por correo.
               </p>
-              <div className="p-3 bg-slate-950/80 rounded-xl border border-emerald-800/50 text-xs font-mono text-emerald-400">
+              <div className="p-3 bg-white rounded-xl border border-emerald-200 text-xs font-mono text-emerald-800 shadow-sm">
                 ✨ {successData.emailMsg}
               </div>
               <button
                 type="button"
                 onClick={() => setSuccessData(null)}
-                className="mt-2 text-xs font-bold text-slate-300 hover:text-white underline"
+                className="mt-1 text-xs font-bold text-emerald-700 hover:text-emerald-900 underline"
               >
                 Crear otro reporte
               </button>
@@ -165,9 +160,9 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
 
       {/* Error Alert */}
       {errorMessage && (
-        <div className="mb-6 flex items-start gap-3 p-4 bg-rose-950/90 border border-rose-500/50 text-rose-200 text-sm rounded-xl">
-          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-400" />
-          <div className="flex-1">{errorMessage}</div>
+        <div className="mb-6 flex items-start gap-3 p-4 bg-rose-50 border border-rose-200 text-rose-800 text-sm rounded-xl">
+          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-600" />
+          <div className="flex-1 font-medium">{errorMessage}</div>
         </div>
       )}
 
@@ -175,8 +170,8 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
         
         {/* Field 1: Neighbor Email */}
         <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-semibold text-slate-200">
-            Email del Vecino Denunciante <span className="text-emerald-400">*</span>
+          <label htmlFor="email" className="block text-sm font-bold text-slate-800">
+            Email del Vecino Denunciante <span className="text-emerald-600">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -190,10 +185,10 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="ejemplo: vecino.activo@comuna.cl"
-              className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 text-slate-100 placeholder-slate-500 text-sm rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+              className="w-full bg-slate-50 border border-slate-300 focus:border-emerald-500 focus:bg-white text-slate-900 placeholder-slate-400 text-sm rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium"
             />
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500 font-medium">
             Utilizado para confirmación y seguimiento de la denuncia pública.
           </p>
         </div>
@@ -212,10 +207,10 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
         {/* Field 3: Problem Description */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <label htmlFor="description" className="block text-sm font-semibold text-slate-200">
-              Descripción del Problema Ambiental <span className="text-emerald-400">*</span>
+            <label htmlFor="description" className="block text-sm font-bold text-slate-800">
+              Descripción del Problema Ambiental <span className="text-emerald-600">*</span>
             </label>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-slate-500 font-medium">
               {description.length} caracteres
             </span>
           </div>
@@ -228,7 +223,7 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe detalladamente la irregularidad (ej: microbasural clandestino, escombros en canal, vertido ilegal de líquidos, quema no autorizada)..."
-              className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 text-slate-100 placeholder-slate-500 text-sm rounded-xl p-3.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all resize-y"
+              className="w-full bg-slate-50 border border-slate-300 focus:border-emerald-500 focus:bg-white text-slate-900 placeholder-slate-400 text-sm rounded-xl p-3.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all resize-y font-medium"
             />
           </div>
         </div>
@@ -245,11 +240,11 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-base px-6 py-4 rounded-xl shadow-lg shadow-emerald-500/25 transition-all transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-base px-6 py-4 rounded-xl shadow-lg shadow-emerald-600/20 transition-all transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {submitting ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin text-slate-950" />
+                <Loader2 className="w-5 h-5 animate-spin text-white" />
                 <span>Enviando Reporte a Supabase y Notificando...</span>
               </>
             ) : (
