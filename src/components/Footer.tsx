@@ -10,7 +10,7 @@ export default function Footer() {
         
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full overflow-hidden border border-blue-400 shadow-sm bg-blue-50 shrink-0">
-            <img src="/logo.png" alt="Logo Vieja Sapa" className="w-full h-full object-cover scale-[1.9] transform" />
+            <img src="/logo.png" alt="Logo Vieja Sapa" className="w-full h-full object-cover scale-[1.5] transform" />
           </div>
           <div>
             <p className="text-sm font-bold text-slate-900">
