@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Eye, Github } from 'lucide-react';
+import { Eye, Heart } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -22,16 +22,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-semibold">
-          <a
-            href="https://github.com/ignaciamalleag-sys/app-vieja-sapa"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-slate-700 hover:text-emerald-600 transition-colors"
-          >
-            <Github className="w-4 h-4 text-slate-900" />
-            <span>GitHub: ignaciamalleag-sys/app-vieja-sapa</span>
-          </a>
+        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+          <Heart className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Plataforma comunitaria de fiscalización pública</span>
         </div>
 
       </div>
