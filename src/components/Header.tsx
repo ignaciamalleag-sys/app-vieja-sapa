@@ -52,7 +52,7 @@ export default function Header() {
               <img
                 src="/logo.png"
                 alt="Logo Vieja Sapa"
-                className="w-full h-full object-cover scale-[1.5] transform"
+                className="w-full h-full object-cover object-center scale-[1.4] transform m-auto"
               />
             </div>
             <div>

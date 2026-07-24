@@ -9,8 +9,8 @@ export default function Footer() {
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden border border-blue-400 shadow-sm bg-blue-50 shrink-0">
-            <img src="/logo.png" alt="Logo Vieja Sapa" className="w-full h-full object-cover scale-[1.5] transform" />
+          <div className="w-10 h-10 rounded-full overflow-hidden border border-blue-400 shadow-sm bg-blue-50 shrink-0 flex items-center justify-center">
+            <img src="/logo.png" alt="Logo Vieja Sapa" className="w-full h-full object-cover object-center scale-[1.4] transform m-auto" />
           </div>
           <div>
             <p className="text-sm font-bold text-slate-900">
