@@ -115,15 +115,18 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
     <div className="bg-white border border-slate-200/90 rounded-2xl shadow-xl shadow-slate-200/50 p-6 sm:p-8">
       
       {/* Form Title & Header */}
-      <div className="flex items-center gap-3.5 pb-6 mb-6 border-b border-slate-100">
-        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm">
+      <div className="flex items-start sm:items-center gap-3.5 pb-6 mb-6 border-b border-slate-100">
+        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5 sm:mt-0">
           <ShieldCheck className="w-6 h-6" />
         </div>
-        <div>
+        <div className="space-y-1">
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             Crear Nuevo Reporte Ambiental
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+            Juntos vigilamos y protegemos los espacios públicos. Sube la foto del desvío, adjunta la ubicación GPS exacta y notifica automáticamente a la direccion ambiental de la comuna a traves de un reporte.
+          </p>
+          <p className="text-xs text-slate-500 font-semibold pt-1">
             Todos los campos marcados con (<span className="text-emerald-600 font-bold">*</span>) son obligatorios.
           </p>
         </div>
