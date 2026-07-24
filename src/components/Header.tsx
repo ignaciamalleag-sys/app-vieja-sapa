@@ -48,16 +48,19 @@ export default function Header() {
           
           {/* Brand Logo & Title */}
           <div className="flex items-center gap-3 text-center sm:text-left">
-            <div className="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 shadow-md shadow-emerald-500/20 text-white shrink-0">
-              <Eye className="w-7 h-7" />
-              <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 border-2 border-white rounded-full animate-ping" />
+            <div className="relative flex items-center justify-center w-14 h-14 rounded-2xl overflow-hidden shadow-md border-2 border-blue-500 bg-blue-50 shrink-0">
+              <img
+                src="/logo.png"
+                alt="Logo Vieja Sapa"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="flex items-center justify-center sm:justify-start gap-2">
                 <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-                  Reportes Vieja Sapa
+                  Reportes Vieja Sapa App
                 </h1>
-                <span className="bg-emerald-100 text-emerald-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-300">
+                <span className="bg-blue-100 text-blue-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-blue-300">
                   PWA Social
                 </span>
               </div>
@@ -72,7 +75,7 @@ export default function Header() {
             {isInstallable && (
               <button
                 onClick={handleInstallClick}
-                className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-sm transition-all transform hover:scale-105 active:scale-95"
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-sm transition-all transform hover:scale-105 active:scale-95"
               >
                 <Download className="w-4 h-4" />
                 Instalar App
@@ -82,13 +85,13 @@ export default function Header() {
             <div
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                 isOnline
-                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  ? 'bg-blue-50 border-blue-200 text-blue-700'
                   : 'bg-amber-50 border-amber-200 text-amber-700'
               }`}
             >
               {isOnline ? (
                 <>
-                  <Wifi className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
+                  <Wifi className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
                   <span>En Línea</span>
                 </>
               ) : (

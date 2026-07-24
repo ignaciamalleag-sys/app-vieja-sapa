@@ -1,4 +1,4 @@
-# 👁️ Reportes Vieja Sapa - Web App (PWA) Social
+# 👁️ Reportes Vieja Sapa App - Web App (PWA) Social
 
 Plataforma gratuita de impacto social diseñada para el reporte, vigilancia y fiscalización colaborativa de desvíos ambientales en espacios públicos (microbasurales, vertederos clandestinos, quema o escombros).
 

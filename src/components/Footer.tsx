@@ -9,12 +9,12 @@ export default function Footer() {
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center">
-            <Eye className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-xl overflow-hidden border border-blue-300 shadow-sm bg-blue-50 shrink-0">
+            <img src="/logo.png" alt="Logo Vieja Sapa" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-sm font-bold text-slate-900">
-              Reportes Vieja Sapa
+              Reportes Vieja Sapa App
             </p>
             <p className="text-xs text-slate-500 font-medium">
               Iniciativa gratuita de impacto social y cuidado del medio ambiente.
@@ -23,7 +23,7 @@ export default function Footer() {
         </div>
 
         <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-          <Heart className="w-3.5 h-3.5 text-emerald-600" />
+          <Heart className="w-3.5 h-3.5 text-blue-600" />
           <span>Plataforma comunitaria de fiscalización pública</span>
         </div>
 

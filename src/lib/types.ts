@@ -7,6 +7,8 @@ export interface EnvironmentalReport {
   longitude: number;
   google_maps_url: string;
   photo_urls: string[];
+  comuna?: string;
+  destination_email?: string;
   status?: 'pendiente' | 'en_revision' | 'resuelto';
 }
 

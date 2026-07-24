@@ -60,7 +60,7 @@ export default function PhotoUploader({ photos, onChange, disabled }: PhotoUploa
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <label className="block text-sm font-bold text-slate-800">
-          Subida de Fotos <span className="text-emerald-600">*</span>
+          Subida de Fotos <span className="text-blue-600">*</span>
           <span className="text-xs font-normal text-slate-500 block sm:inline sm:ml-2">
             (Obligatorio: mínimo 1 foto, máximo 3 fotos)
           </span>
@@ -68,7 +68,7 @@ export default function PhotoUploader({ photos, onChange, disabled }: PhotoUploa
         <span
           className={`text-xs font-extrabold px-2.5 py-1 rounded-full border ${
             photos.length > 0
-              ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+              ? 'bg-blue-100 text-blue-800 border-blue-300'
               : 'bg-amber-50 text-amber-800 border-amber-300'
           }`}
         >
@@ -81,7 +81,7 @@ export default function PhotoUploader({ photos, onChange, disabled }: PhotoUploa
         {photos.map((photo, idx) => (
           <div
             key={photo.id}
-            className="relative group rounded-2xl overflow-hidden border-2 border-emerald-500 bg-slate-100 aspect-square shadow-sm"
+            className="relative group rounded-2xl overflow-hidden border-2 border-blue-500 bg-slate-100 aspect-square shadow-sm"
           >
             <img
               src={photo.previewUrl}
@@ -111,7 +111,7 @@ export default function PhotoUploader({ photos, onChange, disabled }: PhotoUploa
             className={`flex flex-col items-center justify-center border-2 border-dashed rounded-2xl cursor-pointer p-4 text-center aspect-square transition-all ${
               disabled
                 ? 'opacity-50 cursor-not-allowed border-slate-200 bg-slate-50'
-                : 'border-emerald-300 bg-emerald-50/50 hover:bg-emerald-100/60 hover:border-emerald-500'
+                : 'border-blue-300 bg-blue-50/50 hover:bg-blue-100/60 hover:border-blue-500'
             }`}
           >
             <input
@@ -122,10 +122,10 @@ export default function PhotoUploader({ photos, onChange, disabled }: PhotoUploa
               onChange={(e) => handleFileSelect(e.target.files)}
               className="hidden"
             />
-            <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mb-1 shadow-sm">
+            <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mb-1 shadow-sm">
               <ImagePlus className="w-5 h-5" />
             </div>
-            <span className="text-xs font-bold text-emerald-800">
+            <span className="text-xs font-bold text-blue-800">
               {photos.length === 0 ? 'Subir Foto' : 'Agregar'}
             </span>
             <span className="text-[10px] text-slate-500 font-medium mt-0.5">Máx 10MB</span>

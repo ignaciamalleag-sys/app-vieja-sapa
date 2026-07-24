@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Reportes Vieja Sapa - Denuncias Ambientales Comunitarias',
+  title: 'Reportes Vieja Sapa App - Denuncias Ambientales Comunitarias',
   description: 'Web App (PWA) gratuita de impacto social para reportar microbasurales, vertederos clandestinos y desvíos ambientales en espacios públicos con geolocalización GPS y fotos.',
   manifest: '/manifest.json',
   icons: {
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Reportes Vieja Sapa',
+    title: 'Reportes Vieja Sapa App',
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#059669',
+  themeColor: '#2563eb',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -32,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
         <Header />
         <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-6 sm:px-6">
           {children}

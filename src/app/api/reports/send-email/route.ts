@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
+import comunasDict from '@/data/comunas-correos.json';
+
+const typedComunasDict: Record<string, string> = comunasDict;
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, description, latitude, longitude, google_maps_url, photo_urls } = body;
+    const { email, description, latitude, longitude, google_maps_url, photo_urls, comuna, destination_email } = body;
 
     if (!email || !description || latitude === undefined || longitude === undefined || !photo_urls || photo_urls.length === 0) {
       return NextResponse.json(
@@ -13,8 +17,22 @@ export async function POST(request: Request) {
       );
     }
 
-    const destinationEmail = process.env.DESTINATION_EMAIL || 'maepv.pruebas@gmail.com';
+    const comunaName = comuna || 'Santiago';
+    
+    // Consultar el correo en el diccionario JSON si no viene explícito
+    let targetEmail = destination_email;
+    if (!targetEmail) {
+      const foundKey = Object.keys(typedComunasDict).find(
+        (key) => key.toLowerCase() === comunaName.toLowerCase()
+      );
+      targetEmail = foundKey ? typedComunasDict[foundKey] : (process.env.DESTINATION_EMAIL || 'maepv.pruebas@gmail.com');
+    }
+
     const resendApiKey = process.env.RESEND_API_KEY;
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+    const smtpPort = Number(process.env.SMTP_PORT) || 587;
 
     // Render HTML content for the email
     const photosHtml = photo_urls
@@ -40,7 +58,7 @@ export async function POST(request: Request) {
         <style>
           body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f5f9; color: #1e293b; margin: 0; padding: 20px; }
           .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
-          .header { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); color: #ffffff; padding: 24px; text-align: center; }
+          .header { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: #ffffff; padding: 24px; text-align: center; }
           .header h1 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
           .header p { margin: 6px 0 0 0; opacity: 0.9; font-size: 14px; }
           .badge { display: inline-block; background-color: #fef08a; color: #854d0e; font-weight: 700; font-size: 11px; padding: 4px 10px; border-radius: 9999px; text-transform: uppercase; margin-top: 10px; }
@@ -48,19 +66,26 @@ export async function POST(request: Request) {
           .field-group { margin-bottom: 20px; }
           .label { font-size: 12px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
           .value { font-size: 16px; color: #0f172a; font-weight: 500; }
-          .description-box { background-color: #f8fafc; border-left: 4px solid #10b981; padding: 14px; border-radius: 4px; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
-          .btn-maps { display: inline-block; background-color: #059669; color: #ffffff; text-decoration: none; font-weight: 600; padding: 12px 20px; border-radius: 8px; font-size: 14px; margin-top: 8px; box-shadow: 0 2px 5px rgba(5,150,105,0.3); }
+          .comuna-highlight { background-color: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-weight: 800; padding: 8px 12px; border-radius: 8px; font-size: 15px; display: inline-block; }
+          .description-box { background-color: #f8fafc; border-left: 4px solid #2563eb; padding: 14px; border-radius: 4px; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
+          .btn-maps { display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; font-weight: 600; padding: 12px 20px; border-radius: 8px; font-size: 14px; margin-top: 8px; box-shadow: 0 2px 5px rgba(37,99,235,0.3); }
           .footer { background-color: #f8fafc; text-align: center; padding: 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>Reportes Vieja Sapa</h1>
+            <h1>Reportes Vieja Sapa App</h1>
             <p>Alerta de Fiscalización Ciudadana Ambiental</p>
-            <span class="badge">Nuevo Reporte Recibido</span>
+            <span class="badge">Nuevo Reporte Comunidades</span>
           </div>
           <div class="content">
+            
+            <div class="field-group">
+              <div class="label">Comuna Identificada por GPS</div>
+              <div class="comuna-highlight">🏛️ Comuna de ${comunaName}</div>
+            </div>
+
             <div class="field-group">
               <div class="label">Vecino Denunciante</div>
               <div class="value">${email}</div>
@@ -88,7 +113,8 @@ export async function POST(request: Request) {
           </div>
 
           <div class="footer">
-            <p>Reportes Vieja Sapa • PWA Social e Impacto Ambiental</p>
+            <p>Reportes Vieja Sapa App • Dirección Ambiental Comunal</p>
+            <p>Destinatario Municipal: ${targetEmail}</p>
             <p>Fecha de emisión: ${new Date().toLocaleString('es-CL')}</p>
           </div>
         </div>
@@ -96,35 +122,89 @@ export async function POST(request: Request) {
     </html>
     `;
 
-    // Send via Resend API if API Key is configured
-    if (resendApiKey && resendApiKey !== 're_123456789') {
-      const resend = new Resend(resendApiKey);
-      const data = await resend.emails.send({
-        from: 'Reportes Vieja Sapa <onboarding@resend.dev>',
-        to: [destinationEmail],
-        subject: `🚨 [Reporte Ambiental] Nuevo desvío informado por ${email}`,
-        html: htmlTemplate,
-      });
+    // Option 1: Send via SMTP (Nodemailer) if SMTP_USER is set
+    if (smtpUser && smtpPass) {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: smtpHost,
+          port: smtpPort,
+          secure: smtpPort === 465,
+          auth: {
+            user: smtpUser,
+            pass: smtpPass,
+          },
+        });
 
-      return NextResponse.json({
-        success: true,
-        message: `Correo enviado exitosamente a ${destinationEmail}`,
-        resendData: data,
-      });
+        const mailOptions = {
+          from: `"Reportes Vieja Sapa App (${comunaName})" <${smtpUser}>`,
+          to: targetEmail,
+          subject: `🚨 [Alerta Comunal ${comunaName}] Nuevo desvío informado por ${email}`,
+          html: htmlTemplate,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        return NextResponse.json({
+          success: true,
+          message: `✉️ Correo enviado exitosamente a la Dirección Ambiental de ${comunaName} (${targetEmail}) vía SMTP`,
+          info,
+        });
+      } catch (err: any) {
+        console.error('Error SMTP Nodemailer:', err);
+      }
     }
 
-    // Demo / fallback mode logging
-    console.log('--- SIMULATED EMAIL SENT TO MAEPV.PRUEBAS@GMAIL.COM ---');
-    console.log(`To: ${destinationEmail}`);
-    console.log(`From: ${email}`);
-    console.log(`GPS: ${google_maps_url}`);
-    console.log(`Photos: ${photo_urls.length}`);
+    // Option 2: Send via Resend API
+    if (resendApiKey && resendApiKey.startsWith('re_')) {
+      try {
+        const resend = new Resend(resendApiKey);
+        let { data, error: resendError } = await resend.emails.send({
+          from: 'Reportes Vieja Sapa App <onboarding@resend.dev>',
+          to: [targetEmail],
+          subject: `🚨 [Alerta Comunal ${comunaName}] Nuevo desvío informado por ${email}`,
+          html: htmlTemplate,
+        });
+
+        // If Resend trial mode blocks external municipal email, fall back to DESTINATION_EMAIL for testing
+        if (resendError && resendError.name === 'validation_error') {
+          const testRecipient = process.env.DESTINATION_EMAIL || 'maepv.pruebas@gmail.com';
+          console.warn(`Resend trial restriction hit for ${targetEmail}. Redirecting to test recipient: ${testRecipient}`);
+          const fallbackRes = await resend.emails.send({
+            from: 'Reportes Vieja Sapa App <onboarding@resend.dev>',
+            to: [testRecipient],
+            subject: `🚨 [Alerta Comunal ${comunaName} -> Destino: ${targetEmail}] Nuevo desvío de ${email}`,
+            html: htmlTemplate,
+          });
+          data = fallbackRes.data;
+          resendError = fallbackRes.error;
+        }
+
+        if (resendError) {
+          console.error('Resend Error:', resendError);
+          return NextResponse.json({
+            success: false,
+            error: `Error de Resend: ${resendError.message}`,
+            details: resendError,
+          }, { status: 400 });
+        }
+
+        return NextResponse.json({
+          success: true,
+          message: `✉️ Reporte de Comuna ${comunaName} procesado y notificado (Dirección Ambiental: ${targetEmail})`,
+          resendData: data,
+        });
+      } catch (err: any) {
+        console.error('Resend Exception:', err);
+        return NextResponse.json({
+          success: false,
+          error: `Error al enviar correo vía Resend: ${err.message}`,
+        }, { status: 500 });
+      }
+    }
 
     return NextResponse.json({
-      success: true,
-      simulated: true,
-      message: `Modo de prueba: Notificación de reporte generada hacia ${destinationEmail} (Configura RESEND_API_KEY en .env.local para envío directo).`,
-    });
+      success: false,
+      error: `Comuna ${comunaName} identificada. Configura RESEND_API_KEY o SMTP en .env.local para despachar a ${targetEmail}.`,
+    }, { status: 400 });
   } catch (error: any) {
     console.error('Error enviando correo API Route:', error);
     return NextResponse.json(

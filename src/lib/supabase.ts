@@ -63,6 +63,8 @@ export async function saveReport(report: EnvironmentalReport): Promise<Environme
           longitude: report.longitude,
           google_maps_url: report.google_maps_url,
           photo_urls: report.photo_urls,
+          comuna: report.comuna || 'Santiago',
+          destination_email: report.destination_email,
           status: 'pendiente',
         },
       ])

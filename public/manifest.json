@@ -1,6 +1,6 @@
 {
-  "name": "Reportes Vieja Sapa - Denuncias Ambientales",
-  "short_name": "Vieja Sapa",
+  "name": "Reportes Vieja Sapa App - Denuncias Ambientales",
+  "short_name": "Vieja Sapa App",
   "description": "PWA social gratuita para reportar desvíos ambientales, microbasurales y vertederos con GPS y fotos.",
   "start_url": "/",
   "display": "standalone",
