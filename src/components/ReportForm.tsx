@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle2, AlertCircle, Loader2, ShieldCheck, Building2 } from 'lucide-react';
+import { Mail, Send, CheckCircle2, AlertCircle, Loader2, ShieldCheck, Building2, FileText, Camera, MapPin } from 'lucide-react';
 import MapPicker from './MapPicker';
 import PhotoUploader from './PhotoUploader';
 import { PhotoFile, EnvironmentalReport } from '../lib/types';
@@ -116,29 +116,26 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
   };
 
   return (
-    <div className="bg-white border border-slate-200/90 rounded-2xl shadow-xl shadow-slate-200/50 p-6 sm:p-8">
+    <div className="bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/50 p-5 sm:p-8 space-y-6">
       
       {/* Form Title & Header */}
-      <div className="flex items-start sm:items-center gap-3.5 pb-6 mb-6 border-b border-slate-100">
-        <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center shrink-0 shadow-sm mt-0.5 sm:mt-0">
+      <div className="flex items-start sm:items-center gap-3.5 pb-5 border-b border-slate-200">
+        <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md mt-0.5 sm:mt-0">
           <ShieldCheck className="w-6 h-6" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
             Crear Nuevo Reporte Ambiental
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-            Juntos vigilamos, protegemos los espacios públicos y contribuimos a elevar la calidad de vida en la comuna. Sube la foto del desvío, adjunta la ubicación GPS exacta y notifica automáticamente a la direccion ambiental de la comuna a traves de un reporte.
-          </p>
-          <p className="text-xs text-slate-500 font-semibold pt-1">
-            Todos los campos marcados con (<span className="text-blue-600 font-bold">*</span>) son obligatorios.
+            Juntos vigilamos, protegemos los espacios públicos y contribuimos a elevar la calidad de vida en la comuna. Sube la foto del desvío, adjunta la ubicación GPS exacta y notifica automáticamente a la dirección ambiental.
           </p>
         </div>
       </div>
 
       {/* Success Modal / Banner */}
       {successData && (
-        <div className="mb-6 bg-gradient-to-r from-blue-50 via-indigo-50 to-white border-2 border-blue-500 p-5 rounded-2xl shadow-md animate-fade-in">
+        <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-white border-2 border-blue-500 p-5 rounded-2xl shadow-md animate-fade-in">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 mt-0.5 font-bold shadow">
               <CheckCircle2 className="w-6 h-6" />
@@ -173,7 +170,7 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
 
       {/* Error Message */}
       {errorMessage && (
-        <div className="mb-6 bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-xl text-sm flex items-start gap-2.5">
+        <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-xl text-sm flex items-start gap-2.5">
           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-600" />
           <span className="font-semibold">{errorMessage}</span>
         </div>
@@ -181,13 +178,28 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         
-        {/* Field 1: Neighbor Email */}
-        <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-bold text-slate-800">
-            Email del Vecino Denunciante <span className="text-blue-600">*</span>
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+        {/* ========================================================
+            PASO 1: Email del Vecino Denunciante (Fondo Azul Tenue)
+           ======================================================== */}
+        <section className="bg-blue-50/70 border border-blue-200/90 p-5 rounded-2xl space-y-3 shadow-xs">
+          <div className="flex items-center justify-between border-b border-blue-200/60 pb-2.5">
+            <div className="flex items-center gap-2">
+              <span className="bg-blue-600 text-white font-extrabold text-xs px-2.5 py-1 rounded-lg shadow-xs">
+                Paso 1
+              </span>
+              <label htmlFor="email" className="text-sm font-extrabold text-blue-950 flex items-center gap-1.5">
+                <Mail className="w-4 h-4 text-blue-600" />
+                <span>Email del Vecino Denunciante</span>
+                <span className="text-blue-600">*</span>
+              </label>
+            </div>
+            <span className="text-[11px] font-semibold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-md border border-blue-200">
+              Obligatorio
+            </span>
+          </div>
+
+          <div className="relative pt-1">
+            <div className="absolute inset-y-0 left-0 pl-3.5 pt-1 flex items-center pointer-events-none text-slate-400">
               <Mail className="w-4 h-4" />
             </div>
             <input
@@ -198,40 +210,70 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="ejemplo: vecino.activo@comuna.cl"
-              className="w-full bg-slate-50 border border-slate-300 focus:border-blue-500 focus:bg-white text-slate-900 placeholder-slate-400 text-sm rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+              className="w-full bg-white border border-slate-300 focus:border-blue-500 text-slate-900 placeholder-slate-400 text-sm rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
             />
           </div>
-          <p className="text-[11px] text-slate-500 font-medium">
-            Utilizado para confirmación y seguimiento de la denuncia pública.
+          <p className="text-[11px] text-slate-500 font-medium pl-0.5">
+            Utilizado exclusivamente para confirmación y seguimiento de la denuncia pública.
           </p>
-        </div>
+        </section>
 
-        {/* Field 2: GPS Location & Comuna Detection */}
-        <MapPicker
-          latitude={latitude}
-          longitude={longitude}
-          onChange={(lat, lng) => {
-            setLatitude(lat);
-            setLongitude(lng);
-          }}
-          onComunaDetected={(detectedName, detectedEmail) => {
-            setComuna(detectedName);
-            setDestinationEmail(detectedEmail);
-          }}
-          disabled={submitting}
-        />
+        {/* ========================================================
+            PASO 2: Geolocalización GPS & Comuna (Fondo Sky Pastel)
+           ======================================================== */}
+        <section className="bg-sky-50/70 border border-sky-200/90 p-5 rounded-2xl space-y-3 shadow-xs">
+          <div className="flex items-center justify-between border-b border-sky-200/60 pb-2.5 mb-1">
+            <div className="flex items-center gap-2">
+              <span className="bg-sky-600 text-white font-extrabold text-xs px-2.5 py-1 rounded-lg shadow-xs">
+                Paso 2
+              </span>
+              <span className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-sky-600" />
+                <span>Geolocalización GPS & Asignación Comunal</span>
+                <span className="text-sky-600">*</span>
+              </span>
+            </div>
+            <span className="text-[11px] font-semibold text-sky-800 bg-sky-100/80 px-2 py-0.5 rounded-md border border-sky-200">
+              GPS Alta Precisión
+            </span>
+          </div>
 
-        {/* Field 3: Problem Description */}
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <label htmlFor="description" className="block text-sm font-bold text-slate-800">
-              Descripción del Problema Ambiental <span className="text-blue-600">*</span>
-            </label>
-            <span className="text-xs text-slate-500 font-medium">
+          <MapPicker
+            latitude={latitude}
+            longitude={longitude}
+            onChange={(lat, lng) => {
+              setLatitude(lat);
+              setLongitude(lng);
+            }}
+            onComunaDetected={(detectedName, detectedEmail) => {
+              setComuna(detectedName);
+              setDestinationEmail(detectedEmail);
+            }}
+            disabled={submitting}
+          />
+        </section>
+
+        {/* ========================================================
+            PASO 3: Descripción del Desvío (Fondo Slate-Azul)
+           ======================================================== */}
+        <section className="bg-slate-50 border border-blue-200/80 p-5 rounded-2xl space-y-3 shadow-xs">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+            <div className="flex items-center gap-2">
+              <span className="bg-blue-700 text-white font-extrabold text-xs px-2.5 py-1 rounded-lg shadow-xs">
+                Paso 3
+              </span>
+              <label htmlFor="description" className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-blue-700" />
+                <span>Descripción del Problema Ambiental</span>
+                <span className="text-blue-600">*</span>
+              </label>
+            </div>
+            <span className="text-xs text-slate-500 font-semibold font-mono bg-white px-2 py-0.5 rounded-md border border-slate-200">
               {description.length} caracteres
             </span>
           </div>
-          <div className="relative">
+
+          <div className="relative pt-1">
             <textarea
               id="description"
               required
@@ -239,24 +281,44 @@ export default function ReportForm({ onReportSubmitted }: ReportFormProps) {
               disabled={submitting}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe detalladamente el desvío ambiental (ej: acumulacion de escombros en esquina norte, vertedero clandestino, etc)..."
-              className="w-full bg-slate-50 border border-slate-300 focus:border-blue-500 focus:bg-white text-slate-900 placeholder-slate-400 text-sm rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium resize-y"
+              placeholder="Describe detalladamente la irregularidad (ej: vertedero clandestino, microbasural en vereda, escombros en espacio público, etc)..."
+              className="w-full bg-white border border-slate-300 focus:border-blue-500 text-slate-900 placeholder-slate-400 text-sm rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium resize-y"
             />
           </div>
-        </div>
+        </section>
 
-        {/* Field 4: Photo Uploader */}
-        <PhotoUploader
-          photos={photos}
-          onChange={setPhotos}
-          disabled={submitting}
-        />
+        {/* ========================================================
+            PASO 4: Evidencia Fotográfica (Fondo Índigo Suave)
+           ======================================================== */}
+        <section className="bg-indigo-50/70 border border-indigo-200/90 p-5 rounded-2xl space-y-3 shadow-xs">
+          <div className="flex items-center justify-between border-b border-indigo-200/60 pb-2.5 mb-1">
+            <div className="flex items-center gap-2">
+              <span className="bg-indigo-600 text-white font-extrabold text-xs px-2.5 py-1 rounded-lg shadow-xs">
+                Paso 4
+              </span>
+              <span className="text-sm font-extrabold text-indigo-950 flex items-center gap-1.5">
+                <Camera className="w-4 h-4 text-indigo-600" />
+                <span>Evidencia Fotográfica</span>
+                <span className="text-indigo-600">*</span>
+              </span>
+            </div>
+            <span className="text-[11px] font-semibold text-indigo-800 bg-indigo-100/80 px-2 py-0.5 rounded-md border border-indigo-200">
+              Mín 1 - Máx 3 Fotos
+            </span>
+          </div>
+
+          <PhotoUploader
+            photos={photos}
+            onChange={setPhotos}
+            disabled={submitting}
+          />
+        </section>
 
         {/* Submit Button */}
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-extrabold text-base py-4 px-6 rounded-2xl shadow-lg shadow-blue-600/25 flex items-center justify-center gap-3 transition-all transform active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-extrabold text-base py-4 px-6 rounded-2xl shadow-lg shadow-blue-600/25 flex items-center justify-center gap-3 transition-all transform active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed mt-4"
         >
           {submitting ? (
             <>
