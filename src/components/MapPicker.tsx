@@ -169,57 +169,21 @@ export default function MapPicker({
         </div>
       )}
 
-      {/* Coordinate Inputs & Google Maps Link */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 border border-slate-200 p-4 rounded-2xl">
-        <div className="space-y-1">
-          <span className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider block">
-            Latitud:
-          </span>
-          <input
-            type="number"
-            step="any"
-            value={currentLat}
-            onChange={(e) => {
-              setIsManualOverride(false);
-              onChange(parseFloat(e.target.value) || 0, currentLng);
-            }}
-            disabled={disabled}
-            className="w-full bg-white border border-slate-300 text-slate-900 text-sm font-mono font-semibold rounded-xl px-3.5 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-          />
-        </div>
-
-        <div className="space-y-1">
-          <span className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider block">
-            Longitud:
-          </span>
-          <input
-            type="number"
-            step="any"
-            value={currentLng}
-            onChange={(e) => {
-              setIsManualOverride(false);
-              onChange(currentLat, parseFloat(e.target.value) || 0);
-            }}
-            disabled={disabled}
-            className="w-full bg-white border border-slate-300 text-slate-900 text-sm font-mono font-semibold rounded-xl px-3.5 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-          />
-        </div>
-
-        {/* Direct Google Maps Link Button */}
-        <div className="sm:col-span-2 pt-1 flex items-center justify-between">
-          <a
-            href={googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all transform hover:scale-[1.02]"
-          >
-            <MapPin className="w-4 h-4 text-blue-200" />
-            <span>Abrir mapa en Google Maps</span>
-            <ExternalLink className="w-3.5 h-3.5 opacity-80" />
-          </a>
-          <span className="text-[11px] text-slate-500 font-mono font-semibold">
-            {currentLat.toFixed(4)}, {currentLng.toFixed(4)}
-          </span>
+      {/* Direct Google Maps Link Button & Coordinates readout */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white border border-slate-200/90 p-3.5 rounded-2xl shadow-xs">
+        <a
+          href={googleMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all transform hover:scale-[1.01] active:scale-95"
+        >
+          <MapPin className="w-4 h-4 text-blue-200" />
+          <span>Ver Punto en Google Maps</span>
+          <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+        </a>
+        <div className="flex items-center justify-between sm:justify-end gap-2 text-xs font-mono font-semibold text-slate-600 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200">
+          <span className="text-[11px] text-slate-400 font-sans font-medium uppercase tracking-wider">GPS:</span>
+          <span className="text-slate-900">{currentLat.toFixed(5)}, {currentLng.toFixed(5)}</span>
         </div>
       </div>
 
