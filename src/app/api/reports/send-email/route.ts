@@ -113,9 +113,11 @@ export async function POST(request: Request) {
           </div>
 
           <div class="footer">
-            <p>Reportes Vieja Sapa App • Dirección Ambiental Comunal</p>
-            <p>Destinatario Municipal: ${targetEmail}</p>
-            <p>Fecha de emisión: ${new Date().toLocaleString('es-CL')}</p>
+            <p style="margin: 0 0 6px 0; font-weight: 700; color: #334155;">Reportes Vieja Sapa App • Dirección Ambiental Comunal</p>
+            <p style="margin: 6px 0 10px 0; color: #475569; font-size: 11px; line-height: 1.5; background-color: #f1f5f9; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+              ℹ️ <strong>Nota de Atención:</strong> Este reporte fue generado automáticamente a través de la aplicación comunitaria. Para responder, solicitar antecedentes adicionales o dar seguimiento a este caso, por favor comunicarse directamente al correo electrónico del vecino denunciante: <a href="mailto:${email}" style="color: #2563eb; font-weight: 700;">${email}</a>.
+            </p>
+            <p style="margin: 0; font-size: 11px; color: #94a3b8;">Destinatario Municipal: ${targetEmail} • Fecha de emisión: ${new Date().toLocaleString('es-CL')}</p>
           </div>
         </div>
       </body>
