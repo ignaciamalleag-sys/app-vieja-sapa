@@ -48,11 +48,11 @@ export default function Header() {
           
           {/* Brand Logo & Title */}
           <div className="flex items-center gap-3 text-center sm:text-left">
-            <div className="relative flex items-center justify-center w-14 h-14 rounded-full overflow-hidden shadow-md border-2 border-blue-600 bg-blue-50 shrink-0">
+            <div className="relative flex items-center justify-center w-14 h-14 rounded-2xl overflow-hidden shadow-md border-2 border-blue-500 bg-white shrink-0">
               <img
                 src="/logo.png"
                 alt="Logo Vieja Sapa"
-                className="w-full h-full object-cover object-center scale-[1.4] transform m-auto"
+                className="w-full h-full object-cover"
               />
             </div>
             <div>
