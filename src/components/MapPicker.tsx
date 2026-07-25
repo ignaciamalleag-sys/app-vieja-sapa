@@ -189,20 +189,15 @@ export default function MapPicker({
 
       {/* Comuna Selection & Municipal Email Card */}
       <div className="bg-blue-50/80 border border-blue-200 p-4 rounded-2xl space-y-3 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md">
               <Building2 className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold text-blue-950 uppercase tracking-wider flex items-center gap-1">
-                <span>Comuna Asignada:</span>
-                {isManualOverride && (
-                  <span className="bg-amber-100 text-amber-900 font-extrabold px-1.5 py-0.5 text-[10px] rounded border border-amber-300">
-                    Ajuste Manual
-                  </span>
-                )}
+              <div className="text-[11px] font-bold text-blue-950 uppercase tracking-wider">
+                Comuna Asignada Automáticamente por GPS:
               </div>
               <div className="text-base font-extrabold text-slate-900 flex items-center gap-1.5 mt-0.5">
                 {loadingComuna ? (
@@ -215,26 +210,6 @@ export default function MapPicker({
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Selector / Dropdown para corregir/seleccionar comuna manualmente */}
-          <div className="flex items-center gap-2">
-            <Edit3 className="w-4 h-4 text-slate-400 shrink-0" />
-            <select
-              value={allComunas.includes(comunaName) ? comunaName : ''}
-              onChange={(e) => handleManualComunaChange(e.target.value)}
-              disabled={disabled}
-              className="bg-white border border-slate-300 text-slate-800 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-            >
-              <option value="" disabled>
-                -- Cambiar comuna --
-              </option>
-              {allComunas.map((comuna) => (
-                <option key={comuna} value={comuna}>
-                  {comuna}
-                </option>
-              ))}
-            </select>
           </div>
 
         </div>
