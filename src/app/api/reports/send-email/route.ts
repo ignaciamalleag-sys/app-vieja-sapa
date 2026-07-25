@@ -166,14 +166,14 @@ export async function POST(request: Request) {
           html: htmlTemplate,
         });
 
-        // If Resend trial mode blocks external municipal email, fall back to DESTINATION_EMAIL for testing
+        // If Resend trial mode blocks external municipal email, fall back to owner email for testing
         if (resendError && resendError.name === 'validation_error') {
-          const testRecipient = process.env.DESTINATION_EMAIL || 'maepv.pruebas@gmail.com';
-          console.warn(`Resend trial restriction hit for ${targetEmail}. Redirecting to test recipient: ${testRecipient}`);
+          const testRecipient = 'ignacia.malleag@gmail.com';
+          console.warn(`Resend trial restriction hit for ${targetEmail}. Redirecting to verified trial recipient: ${testRecipient}`);
           const fallbackRes = await resend.emails.send({
             from: 'Reportes Vieja Sapa App <onboarding@resend.dev>',
             to: [testRecipient],
-            subject: `🚨 [Alerta Comunal ${comunaName} -> Destino: ${targetEmail}] Nuevo desvío de ${email}`,
+            subject: `🚨 [Alerta Comunal ${comunaName} -> Destino Municipal: ${targetEmail}] Nuevo desvío de ${email}`,
             html: htmlTemplate,
           });
           data = fallbackRes.data;
