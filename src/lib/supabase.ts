@@ -49,34 +49,64 @@ export async function uploadReportPhoto(file: File): Promise<string> {
 }
 
 /**
- * Saves a report to Supabase DB or LocalStorage fallback
+ * Saves a report to Supabase DB or LocalStorage fallback with automatic schema resilience
  */
 export async function saveReport(report: EnvironmentalReport): Promise<EnvironmentalReport> {
   if (isSupabaseConfigured && supabase) {
-    const { data, error } = await supabase
+    // Intentar inserción completa con comuna y destination_email
+    const fullPayload: any = {
+      email: report.email,
+      description: report.description,
+      latitude: report.latitude,
+      longitude: report.longitude,
+      google_maps_url: report.google_maps_url,
+      photo_urls: report.photo_urls,
+      comuna: report.comuna || 'Santiago',
+      destination_email: report.destination_email,
+      status: 'pendiente',
+    };
+
+    let { data, error } = await supabase
       .from('reports')
-      .insert([
-        {
-          email: report.email,
-          description: report.description,
-          latitude: report.latitude,
-          longitude: report.longitude,
-          google_maps_url: report.google_maps_url,
-          photo_urls: report.photo_urls,
-          comuna: report.comuna || 'Santiago',
-          destination_email: report.destination_email,
-          status: 'pendiente',
-        },
-      ])
+      .insert([fullPayload])
       .select()
       .single();
+
+    // Si la tabla remota en Supabase no tiene la columna 'comuna' aún, reintentar con el esquema base
+    if (error && (error.message.includes('comuna') || error.message.includes('destination_email') || error.code === 'PGRST204')) {
+      console.warn('Columna comunitaria no encontrada en Supabase SQL schema. Reintentando inserción con campos base:', error.message);
+      
+      const basePayload = {
+        email: report.email,
+        description: report.description,
+        latitude: report.latitude,
+        longitude: report.longitude,
+        google_maps_url: report.google_maps_url,
+        photo_urls: report.photo_urls,
+        status: 'pendiente',
+      };
+
+      const retryRes = await supabase
+        .from('reports')
+        .insert([basePayload])
+        .select()
+        .single();
+
+      data = retryRes.data;
+      error = retryRes.error;
+    }
 
     if (error) {
       console.error('Supabase DB Insert error:', error);
       throw new Error(`Error guardando reporte en Supabase: ${error.message}`);
     }
 
-    return data as EnvironmentalReport;
+    // Asegurar que la respuesta retorne los valores de comuna y correo de destino para la notificación
+    return {
+      ...(data as EnvironmentalReport),
+      comuna: report.comuna,
+      destination_email: report.destination_email,
+    };
   }
 
   // LocalStorage fallback mode
